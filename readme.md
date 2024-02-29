@@ -1,12 +1,12 @@
 # RLE Image Encoder
 
 An Image Encoder that reads hex strings and displays them in an image format. 
-![UF Gator in a pixelated format](image.png)
+![UF Gator in a pixelated format](readmeImage/image.png)
 
 ## Features
 
 Displays a Spectrum Image of colors to see the current scheme (based on theme):
-![Color Spectrum based on theme](image-1.png)
+![Color Spectrum based on theme](readmeImage/image-1.png)
 
 RLE Menu with options to load, read, and display images based on hex strings:
 
