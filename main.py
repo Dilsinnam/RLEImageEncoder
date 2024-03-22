@@ -3,7 +3,22 @@ import os
 
 
 def to_hex_string(data):
-    return "".join(format(x, "02x") for x in data)
+    hex_string = ""
+    current_count = 1
+    for i in range(1, len(data)):
+        if data[i] == data[i - 1]:
+            current_count += 1
+        else:
+            if current_count == 1:
+                hex_string += f"{data[i - 1]:x}"
+            else:
+                hex_string += f"{data[i - 1]:x}" * current_count
+            current_count = 1
+    if current_count == 1:
+        hex_string += f"{data[-1]:x}"
+    else:
+        hex_string += f"{data[-1]:x}" * current_count
+    return hex_string
 
 
 def count_runs(flat_data):
@@ -64,9 +79,6 @@ def string_to_rle(rle_string):
     ]
 
 
-import os
-
-
 def main():
     print("Welcome to RLE image encoder!")
     print()
@@ -82,7 +94,7 @@ def main():
         print("1. Load File")
         print("2. Load Test Image")
         print("3. Read RLE String")
-        print("4. Read RLE Hex String")  # Added option
+        print("4. Read RLE Hex String")
         print("5. Read Data Hex String")
         print("6. Display Image")
         print("7. Display RLE String")
@@ -91,11 +103,10 @@ def main():
 
         choice = input("Select a Menu Option: ")
         if choice == "0":
-            print("Exiting program.")
             break
 
         if choice == "1":
-            filename = input("Enter the filename from testfiles folder: ")
+            filename = input("Enter name of file to load: ")
             dir_path = os.path.dirname(os.path.realpath(__file__))
             if not filename.startswith("testfiles/"):
                 filename = os.path.join("testfiles", filename)
@@ -120,13 +131,32 @@ def main():
         elif choice == "6":
             if data is not None:
                 ConsoleGfx.display_image(data)
+            else:
+                print("Displaying image...")
+                print("(no data)")
         elif choice == "7":
-            rle_data = encode_rle(data)
-            print("RLE hex values:", to_hex_string(rle_data))
+            if data is not None:
+                rle_data = encode_rle(data)
+                if rle_data:
+                    print("RLE representation:", to_rle_string(rle_data))
+                else:
+                    print("RLE representation: (no data)")
+            else:
+                print("RLE representation: (no data)")
         elif choice == "8":
-            print("Flat hex values:", to_hex_string(data))
+            if data is not None:
+                rle_data = encode_rle(data)
+                print("RLE hex values:", to_hex_string(rle_data))
+            else:
+                print("RLE hex values: (no data)")
+        elif choice == "9":
+            if data is not None:
+                flat_data = decode_rle(encode_rle(data))
+                print("Flat hex values:", to_hex_string(flat_data))
+            else:
+                print("Flat hex values: (no data)")
         else:
-            print("Invalid choice. Please try again.")
+            print("Error! Invalid input.")
 
 
 if __name__ == "__main__":
